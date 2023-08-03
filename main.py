@@ -19,9 +19,14 @@ async def receive(message: types.Message):
     """
     print(f'type: {type(message)}, message: {message}')
     shares = Shares(message)
-    await shares.process()
-
-    await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
+    response_type = await shares.process()
+    if response_type == 'img':
+        reply_message = 'Image uploaded'
+    elif response_type == 'url':
+        reply_message = 'note saved'
+    else:
+        reply_message = 'Unknown message type'
+    await message.reply(reply_message)
 
 
 if __name__ == '__main__':
