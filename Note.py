@@ -14,13 +14,15 @@ class Note:
     image: str = None
     user: str = None
     private: bool = True
-    created_at: datetime = None
+    timestamp: int = None
 
-    def __init__(self, title='', body='', image='', user=''):
+    def __init__(self, title='', body='', image='', user='', date=0):
         self.title = title
         self.body = body
         self.image = image
         self.user = user
+        self.created_at = date
+        return
 
     @classmethod
     async def create_from_message(cls, message: types.Message):
@@ -28,11 +30,13 @@ class Note:
         body = message.text if message.text else ''
         image = await cls.load_image(message)
         user = message.from_user.username
+        date = int(message.date.timestamp())
         return cls(
             title=title,
             body=body,
             image=image,
-            user=user
+            user=user,
+            date=date
         )
 
     @classmethod
